@@ -30,9 +30,16 @@ export class ChapterService {
         return chapter ;
     }
     async getListChapterManga(manga_id:string):Promise<Array<Chapter>>{
-        return this.chapterModel.find({
+        const KEY_CACHE= "CACHE_LIST_CHAPTER_"+manga_id;
+        let dataCache= await this.cacheService.get<Chapter[]>(KEY_CACHE);
+        if(dataCache){
+            return dataCache;
+        }
+        dataCache =await  this.chapterModel.find({
             manga:manga_id
-        }).sort({index:1}).select("-images");
+        }).sort({index:1}).select("-images -url -updatedAt");
+        await this.cacheService.set(KEY_CACHE,dataCache,1000*60*30);
+        return dataCache;
     }
     async deleteAllImagesChapter(chapter_id:string):Promise<any>{
         return this.chapterModel.findByIdAndUpdate(chapter_id,{images:[]});
