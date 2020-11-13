@@ -41,6 +41,13 @@ export class ChapterService {
         await this.cacheService.set(KEY_CACHE,dataCache,1000*60*30);
         return dataCache;
     }
+    async getListChapterMangaNoCache(manga_id:string):Promise<Array<Chapter>>{
+        return this.chapterModel.find({
+            manga:manga_id
+        }).sort({index:1}).select("-images");
+        
+    }
+
     async deleteAllImagesChapter(chapter_id:string):Promise<any>{
         return this.chapterModel.findByIdAndUpdate(chapter_id,{images:[]});
     }

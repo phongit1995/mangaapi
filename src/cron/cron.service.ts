@@ -14,6 +14,7 @@ constructor(private mangaService:MangaService,
     private readonly logger = new Logger(TasksService.name);
     private readonly URL_WEBSITE:string="http://www.nettruyen.com/";
   @Cron(CronExpression.EVERY_2_HOURS)
+  //@Timeout(1000)
   async handleCron() {
     this.logger.debug(Date.now());
     await this.getListMangaNews();
@@ -25,6 +26,7 @@ constructor(private mangaService:MangaService,
       console.log("total Link In DB :" +listMangaNeedUpdate.length);
       const ListPromiseUpdateManga = listMangaNeedUpdate.map(item=>this.updateMangaInfo(item));
       await Promise.all(ListPromiseUpdateManga);
+      //await this.updateMangaInfo(listMangaNeedUpdate[0]);
   }
   private async getListUrlNewsManga():Promise<string[]>{
       const resultFetch = await this.requestService.getMethod<string>(this.URL_WEBSITE);
@@ -37,14 +39,15 @@ constructor(private mangaService:MangaService,
       return listLink;
   }
   private async updateMangaInfo(manga_info:{_id?:string,url?:string}){
-      const ListChapterInDb = await this.chapterService.getListChapterManga(manga_info._id);
-      console.log("list Chapter In DB : "+ListChapterInDb.length);
+      const ListChapterInDb = await this.chapterService.getListChapterMangaNoCache(manga_info._id);
       let listChapterOnWeb = await this.getListChapterFromWeb(manga_info.url);
-   
-      let ListChapterNeedUpdate = xorBy(listChapterOnWeb,ListChapterInDb,'url');
+      let ListChapterNeedUpdate = xorBy(ListChapterInDb,listChapterOnWeb,'index');
       if(ListChapterNeedUpdate.length==0){
         return true;
       }
+      console.log("list Chapter In DB : "+ListChapterInDb.length);
+      console.log("list Chapter In WEB : "+listChapterOnWeb.length);
+      console.log("list Chapter Need Update : "+ ListChapterNeedUpdate.length);
       const ArrayPromiseInsertChapter = await ListChapterNeedUpdate.map((item)=>{
           return this.chapterService.createNewChapter(manga_info._id,item.url,item.name,item.index,item.source);
       })
