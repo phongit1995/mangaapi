@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { Cron ,Timeout } from '@nestjs/schedule';
+import { Cron ,Timeout ,CronExpression} from '@nestjs/schedule';
 import { ChapterService } from 'src/modules/chapter/chapter.service';
 import { MangaService } from 'src/modules/manga/manga.service';
 import { RequestService } from 'src/shared/services/request.service';
@@ -13,7 +13,7 @@ constructor(private mangaService:MangaService,
     private requestService:RequestService){}
     private readonly logger = new Logger(TasksService.name);
     private readonly URL_WEBSITE:string="http://www.nettruyen.com/";
-  @Timeout(1000)
+  @Cron(CronExpression.EVERY_2_HOURS)
   async handleCron() {
     this.logger.debug(Date.now());
     await this.getListMangaNews();
