@@ -1,9 +1,10 @@
 import { Body, Controller, Post, UsePipes, ValidationPipe } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiConsumes, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ApiResult } from 'src/common/api-result';
 import { dtoGetDetialManga, dtoGetListManga, dtoGetListMangaByCategory, dtoHiddenManga, dtoSearchManga } from './manga.dto';
 import { MangaService } from './manga.service';
 @ApiTags("manga")
+@ApiConsumes("Manga Api")
 @Controller('manga')
 export class MangaController {
     constructor(

@@ -3,9 +3,11 @@ import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import * as swStats from 'swagger-stats';
 export function setUpSwagger(app:INestApplication):void{
     const options = new DocumentBuilder()
-    .setTitle('SAVE ME')
+    .setTitle('Manga API')
     .setVersion('1.0')
-    .addTag('Save me API')
+    .addTag('Manga')
+    .setDescription("API MANGA FOR APP")
+    .setContact("Phong Dinh Nguyen","https://www.facebook.com/phongdinhnguyen123/","phong123@gmail.com")
     .build();
     app.use(swStats.getMiddleware({
         name: 'API SAVE ME ',

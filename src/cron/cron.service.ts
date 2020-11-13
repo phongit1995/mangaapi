@@ -25,7 +25,6 @@ constructor(private mangaService:MangaService,
       console.log("total Link In DB :" +listMangaNeedUpdate.length);
       const ListPromiseUpdateManga = listMangaNeedUpdate.map(item=>this.updateMangaInfo(item));
       await Promise.all(ListPromiseUpdateManga);
-      //await this.updateMangaInfo(listMangaNeedUpdate[1]);
   }
   private async getListUrlNewsManga():Promise<string[]>{
       const resultFetch = await this.requestService.getMethod<string>(this.URL_WEBSITE);
@@ -46,14 +45,13 @@ constructor(private mangaService:MangaService,
       if(ListChapterNeedUpdate.length==0){
         return true;
       }
-      console.log(ListChapterNeedUpdate);
       const ArrayPromiseInsertChapter = await ListChapterNeedUpdate.map((item)=>{
           return this.chapterService.createNewChapter(manga_info._id,item.url,item.name,item.index,item.source);
       })
       const resultInsertChapter =await Promise.all(ArrayPromiseInsertChapter);
       const listIdChapterInsert:string[] = resultInsertChapter.map(item=>item._id);
       await this.mangaService.updateNewChapter(manga_info._id,listIdChapterInsert);
-      console.log("update succes manga_id : "+ manga_info._id);
+      console.log("update succes manga_id : "+ manga_info._id + " NumberChapter : "+listIdChapterInsert.length);
   }
   private async getListChapterFromWeb(url:string){
       const resultFetch = await this.requestService.getMethod<string>(url);
