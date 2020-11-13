@@ -1,7 +1,7 @@
 import { Body, Controller, Post, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ApiConsumes, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ApiResult } from 'src/common/api-result';
-import { dtoGetDetialManga, dtoGetListManga, dtoGetListMangaByCategory, dtoHiddenManga, dtoSearchManga } from './manga.dto';
+import { dtoAddDeviceManga, dtoGetDetialManga, dtoGetListManga, dtoGetListMangaByCategory, dtoHiddenManga, dtoRemoveDeviceManga, dtoSearchManga } from './manga.dto';
 import { MangaService } from './manga.service';
 @ApiTags("manga")
 @ApiConsumes("Manga Api")
@@ -15,8 +15,8 @@ export class MangaController {
     @ApiResponse({ status: 200, description: 'Hidden Manga Success Fully.'})
     @UsePipes(new ValidationPipe({transform:true}))
     async getDetialManga(@Body()dataGet:dtoGetDetialManga){
-        await this.mangaService.getMangaById(dataGet.manga_id);
-        return (new ApiResult().success())
+        const detialManga=await this.mangaService.getMangaById(dataGet.manga_id);
+        return (new ApiResult().success(detialManga))
     }
     @Post("get-list")
     @ApiOperation({summary:"Get List Of Manga"})
@@ -48,8 +48,22 @@ export class MangaController {
     @UsePipes(new ValidationPipe({transform:true}))
     async hiddenManga(@Body()dataHidden:dtoHiddenManga){
         let resultGame = await this.mangaService.HiddenManga(dataHidden.manga_id);
-        console.log(resultGame);
         return (new ApiResult().success())
     }
-    
+    @Post("add-devices")
+    @ApiOperation({summary:"Add Devices When Follow Manga "})
+    @ApiResponse({ status: 200, description: 'Add Device Success Fully.'})
+    @UsePipes(new ValidationPipe({transform:true}))
+    async addDevicesToManga(@Body()dataAdd:dtoAddDeviceManga){
+        await this.mangaService.addDevicesToManga(dataAdd.manga_id,dataAdd.device);
+        return (new ApiResult().success())
+    }
+    @Post("remove-devices")
+    @ApiOperation({summary:"Remove Devices When UnFollow Manga "})
+    @ApiResponse({ status: 200, description: 'Remove Device Success Fully.'})
+    @UsePipes(new ValidationPipe({transform:true}))
+    async removeDevicesToManga(@Body()dataAdd:dtoRemoveDeviceManga){
+        await this.mangaService.removeDevicesToManga(dataAdd.manga_id,dataAdd.device);
+        return (new ApiResult().success())
+    }
 }

@@ -75,4 +75,16 @@ export class MangaService {
             chapter_update: new Date()
         })
     }
+    async addDevicesToManga(manga_id:string,devices:string){
+        let manga = await this.mangaModel.findById(manga_id);
+        if( manga.devices.indexOf(devices)<0){
+            manga.devices.push(devices);
+        }
+        await manga.save();
+    }
+    async removeDevicesToManga(manga_id:string,devices:string){
+        let manga = await this.mangaModel.findById(manga_id);
+        manga.devices = manga.devices.filter(item=>item!=devices);
+        manga.save();
+    }
 }

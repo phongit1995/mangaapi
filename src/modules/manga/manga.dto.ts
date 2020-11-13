@@ -61,3 +61,19 @@ export class dtoGetDetialManga {
     @IsMongoId()
     manga_id:string;
 }
+export class dtoAddDeviceManga{
+    @ApiProperty({description:'Id Manga'})
+    @IsMongoId()
+    manga_id:string;
+    @ApiProperty({description:"Devices ID"})
+    @IsString()
+    device:string;
+}
+export class dtoRemoveDeviceManga{
+    @ApiProperty({description:'Id Manga'})
+    @IsMongoId()
+    manga_id:string;
+    @ApiProperty({description:"Devices ID"})
+    @IsString()
+    device:string;
+}
