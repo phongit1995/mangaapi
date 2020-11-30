@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { Chapter } from 'src/database/chapter.model';
 import { Manga, MANGA_TYPE } from 'src/database/manga.model';
 import { CacheService } from 'src/shared/services/cache/cache.service';
 import { dtoGetListManga, dtoGetListMangaByCategory, dtoSearchManga } from './manga.dto';
@@ -8,9 +9,19 @@ import { dtoGetListManga, dtoGetListMangaByCategory, dtoSearchManga } from './ma
 @Injectable()
 export class MangaService {
     constructor(@InjectModel('manga' )private mangaModel:Model<Manga>,
-    private cacheService:CacheService){}
+    private cacheService:CacheService,
+    @InjectModel('chapter' )private chapterModel:Model<Chapter>){}
     async getMangaById(manga_id:string):Promise<Manga>{
         return this.mangaModel.findById(manga_id).select("-chapters");
+    }
+    async getDetialMangaById(manga_id:string):Promise<Manga>{
+        let Manga =  await this.mangaModel.findById(manga_id).select("-chapters");
+        if(!Manga.first_chapter){
+            const chapter = await this.chapterModel.findOne({manga:manga_id});
+            Manga.first_chapter = chapter._id ;
+            await Manga.save();
+        }
+        return Manga ;
     }
     async getListManga(dataGet:dtoGetListManga):Promise<Manga[]>{
         const KEY_CACHE:string="CACHE_LIST_MANGA_"+dataGet.page+"_"+dataGet.type+"_"+dataGet.numberItem;

@@ -15,7 +15,7 @@ export class MangaController {
     @ApiResponse({ status: 200, description: 'Hidden Manga Success Fully.'})
     @UsePipes(new ValidationPipe({transform:true}))
     async getDetialManga(@Body()dataGet:dtoGetDetialManga){
-        const detialManga=await this.mangaService.getMangaById(dataGet.manga_id);
+        const detialManga=await this.mangaService.getDetialMangaById(dataGet.manga_id);
         return (new ApiResult().success(detialManga))
     }
     @Post("get-list")

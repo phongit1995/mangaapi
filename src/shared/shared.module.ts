@@ -6,7 +6,8 @@ import {CacheService} from './services/cache/cache.service';
 import { RequestService } from "./services/request.service";
 import { MongooseModule } from "@nestjs/mongoose";
 import { ScheduleModule } from '@nestjs/schedule';
-const providers:Array<any> = [ConfigServer,CacheService,RequestService] 
+import { FcmPushService } from "./services/push.service";
+const providers:Array<any> = [ConfigServer,CacheService,RequestService,FcmPushService] 
 @Global()
 @Module({
     providers:[

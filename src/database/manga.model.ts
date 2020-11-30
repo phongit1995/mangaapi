@@ -27,6 +27,10 @@ export const mangaSchema:mongoose.Schema = new mongoose.Schema({
         {type:mongoose.Types.ObjectId,
         ref:'chapter'}
     ],
+    first_chapter:{
+        type:mongoose.Types.ObjectId,
+        ref:'chapter'
+    },
     chapter_update:{
         type:Date,
         default:Date.now
@@ -58,5 +62,6 @@ export interface Manga extends mongoose.Document {
     chapters?:Array<string>,
     chapter_update?:Date,
     source?:string,
+    first_chapter?:string,
     devices?:Array<string>
 }

@@ -23,9 +23,9 @@ let queue  = kue.createQueue({
         }
     },
 });
-//getListLinkInPage();
+// getListLinkInPage(1);
 // Get ALL Link In Chapter
-// for (let i=1;i<=518;i++){
+// for (let i=1;i<=519;i++){
 //     let job = queue.create("getLinkCommic",i).attempts(3).save(function(error) {
 //         if (!error) console.log(job.id);
 //         else console.log(error);
@@ -52,7 +52,7 @@ listCommitNotUpdate().then(data=>{
         
     })
 })
-queue.process("getChapterComic",6, function(job,done){
+queue.process("getChapterComic",1, function(job,done){
     getDetialComic(job.data.url,job.data.id).then((data)=>{
         console.log(job.data.url + " : So Page " + data.total + "  List :" + data.update);
         done()

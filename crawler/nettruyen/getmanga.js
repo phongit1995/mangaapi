@@ -5,10 +5,18 @@ let  fs = require( 'fs');
 let path = require ( 'path');
 let cheerio = require("cheerio");
 let {LIST_GENDER, MANGA_TYPE} = require("../constant");
+const UserAgent = require('./../userAgent.json');
 const URL_PAGE="http://www.nettruyen.com/?page=";
 const getListLinkInPage= async (page)=>{
     let url = URL_PAGE + page;
-    let resultData = await request(url);
+    const options={
+        url:url,
+        headers:{
+            "User-Agent":"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.66 Safari/537.36",
+            "cookie":"_ga=GA1.2.543613398.1594355006; comicvisitor=08df91f0-1872-4f63-93e0-86ced6f15a0d; __cfduid=d7d8b31265b945b9c06ee39945dd11daa1604983952; _gid=GA1.2.1212170875.1606706474; ASP.NET_SessionId=qlwudqiq4sqjfjgwscg3s11t; _gat_gtag_UA_57670566_6=1; cf_clearance=9eebd2e17908990fa50378bd5d7f7a11e4a432a5-1606710167-0-150"
+        }
+    }
+    let resultData = await request(options);
     let $ = cheerio.load(resultData);
     let listCommic = $(".item");
     let listLink = [];
@@ -26,7 +34,12 @@ const getListLinkInPage= async (page)=>{
 }
 const getDetialComic =  async (url,commicId)=>{
     let data = await  request({
-        uri:url
+        uri:url,
+        headers:{
+            Referer:"http://www.nettruyen.com",
+            'User-Agent': UserAgent[Math.floor(Math.random()*UserAgent.length)],
+            "cookie":"_ga=GA1.2.543613398.1594355006; comicvisitor=08df91f0-1872-4f63-93e0-86ced6f15a0d; __cfduid=d7d8b31265b945b9c06ee39945dd11daa1604983952; _gid=GA1.2.1212170875.1606706474; ASP.NET_SessionId=qlwudqiq4sqjfjgwscg3s11t; cf_chl_1=d6a5a0361b3614c; cf_chl_prog=x17; cf_clearance=bff8534ac26e5269bc3fc87f8e546d8c439e5ee4-1606718724-0-150; _gat_gtag_UA_57670566_6=1"
+        }
     })
     console.log(url);
     const $ = cheerio.load(data);
@@ -84,7 +97,7 @@ const listCommitNotUpdate= ()=>{
                 chapters:{$size:0}
             }
         ]
-    }).limit(6000);
+    }).limit(2000);
 }
 
 const createNewManga = async (url)=>{
