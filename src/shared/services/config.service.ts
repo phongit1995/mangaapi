@@ -5,7 +5,7 @@ export class ConfigServer {
     private readonly validationScheme = {
         PORT: Joi.number().default(3000),
         MONGO_URL:Joi.string(),
-        SERVER_PUSH_KEY:Joi.string(),
+        SERVER_PUSH_KEY:Joi.string().required(),
     }
     constructor(){
         let config = dotenv.config();

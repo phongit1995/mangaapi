@@ -5,11 +5,13 @@ import { ConfigServer } from './config.service';
 export class FcmPushService{
     private fcm:any ;
     constructor(private configServer:ConfigServer){
-        this.fcm = new fcmPush(this.configServer.push_key);
+        console.log(configServer.push_key);
+        this.fcm = new fcmPush(configServer.push_key);
     }
     async sendMessage(message:pushMessage):Promise<void>{
         return this.fcm.send(message,function(err, response){
             if (err) {
+                console.log(err);
                 console.log("Push Notification False");
             } else {
                 
