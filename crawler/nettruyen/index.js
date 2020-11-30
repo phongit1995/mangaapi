@@ -31,7 +31,7 @@ let queue  = kue.createQueue({
 //         else console.log(error);
 //     });
 // }
-// queue.process("getLinkCommic",8,function(job,done){
+// queue.process("getLinkCommic",2,function(job,done){
 //     getListLinkInPage(job.data).then((data)=>{
 //         console.log("page "+job.data+ " : "+ data);
 //         done()
@@ -45,20 +45,21 @@ let queue  = kue.createQueue({
 //getDetialComic("http://www.nettruyen.com/truyen-tranh/tuong-quan-moi-len-giuong-25476","5fabab8ff6b9654114cf7dfb");
 listCommitNotUpdate().then(data=>{
     data.forEach((item)=>{
-        let job = queue.create("getChapterComic",{url:item.url,id:item._id}).attempts(3).save(function(error) {
+        let job = queue.create("getChapterComic",{url:item.url,id:item._id}).delay(500).save(function(error) {
             if (!error) console.log(job.id);
             else console.log(error);
         });
         
     })
 })
-queue.process("getChapterComic",1, function(job,done){
+queue.process("getChapterComic",4, function(job,done){
     getDetialComic(job.data.url,job.data.id).then((data)=>{
         console.log(job.data.url + " : So Page " + data.total + "  List :" + data.update);
         done()
     }).catch(error=>{
-        console.log(error);
+        //console.log(error);
         console.error("Lỗi URL:" + job.data.url);
+        done()
     })
 })
 kue.app.listen(5000);

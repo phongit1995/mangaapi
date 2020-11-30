@@ -1,6 +1,6 @@
 import { Body, Controller, Post, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ApiConsumes, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { dtoTestNotification } from './notification.dto';
+import { dtoTestNotification, dtoTestNotificationDevice } from './notification.dto';
 import { NotificationService } from './notification.service';
 @ApiTags("notification")
 @ApiConsumes("Notification Api")
@@ -14,5 +14,12 @@ export class NotificationController {
     async testNotification(@Body() dataTest:dtoTestNotification){
         await this.notificationService.pushNotificationToManga(dataTest.manga_id);
         return 0 ;
+    }
+    @Post("test-notification-devices")
+    @ApiOperation({summary:"Test notification"})
+    @ApiResponse({ status: 200, description: 'test success.'})
+    @UsePipes(new ValidationPipe({transform:true}))
+    async testNotificationSenDevices(@Body() dataTest:dtoTestNotificationDevice){
+        await this.notificationService.pushNotificationToDevices(dataTest.device);
     }
 }

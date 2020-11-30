@@ -14,7 +14,7 @@ export class FcmPushService{
                 console.log(err);
                 console.log("Push Notification False");
             } else {
-                
+                console.log(response);
             }
         });
     }

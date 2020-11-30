@@ -17,4 +17,13 @@ export class NotificationService {
         })
         console.log(Manga);
     }
+    async pushNotificationToDevices(device:string){
+        await this.fmcPushService.sendMessage({
+            notification:{title:"Update Manga",body: "Hello Man"},
+            registration_ids:[device],
+            data:{
+                type:""
+            }
+        })
+    }
 }

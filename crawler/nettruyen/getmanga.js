@@ -41,7 +41,6 @@ const getDetialComic =  async (url,commicId)=>{
             "cookie":"_ga=GA1.2.543613398.1594355006; comicvisitor=08df91f0-1872-4f63-93e0-86ced6f15a0d; __cfduid=d7d8b31265b945b9c06ee39945dd11daa1604983952; _gid=GA1.2.1212170875.1606706474; ASP.NET_SessionId=qlwudqiq4sqjfjgwscg3s11t; cf_chl_1=d6a5a0361b3614c; cf_chl_prog=x17; cf_clearance=bff8534ac26e5269bc3fc87f8e546d8c439e5ee4-1606718724-0-150; _gat_gtag_UA_57670566_6=1"
         }
     })
-    console.log(url);
     const $ = cheerio.load(data);
     let listChapter =[];
     const listGenders = [];
@@ -97,7 +96,7 @@ const listCommitNotUpdate= ()=>{
                 chapters:{$size:0}
             }
         ]
-    }).limit(2000);
+    }).limit(6000);
 }
 
 const createNewManga = async (url)=>{
