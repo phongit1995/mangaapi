@@ -37,7 +37,7 @@ export class ChapterService {
         }
         dataCache =await  this.chapterModel.find({
             manga:manga_id
-        }).sort({index:1}).select("-images -url -updatedAt");
+        }).sort({index:1}).select("-images -url -updatedAt -source -manga");
         await this.cacheService.set(KEY_CACHE,dataCache,1000*60*30);
         return dataCache;
     }
