@@ -13,7 +13,6 @@ export class ConfigServer {
             throw new Error('No .env found');
         }
         this.envConfig = this.validateInput(config.parsed);
-        console.log('Config env success')
     }
     public get(key:string):string{
         return process.env[key];
