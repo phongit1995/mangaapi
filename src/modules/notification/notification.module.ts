@@ -9,6 +9,7 @@ import { mangaSchema } from 'src/database/manga.model';
     MongooseModule.forFeature([{name:"manga",schema:mangaSchema}]),
   ],
   providers: [NotificationService],
-  controllers: [NotificationController]
+  controllers: [NotificationController],
+  exports:[NotificationService]
 })
 export class NotificationModule {}

@@ -5,12 +5,14 @@ import { MangaService } from 'src/modules/manga/manga.service';
 import { RequestService } from 'src/shared/services/request.service';
 import * as cheerio from 'cheerio';
 import {xorBy} from 'lodash';
+import { NotificationService } from 'src/modules/notification/notification.service';
 const BASE_URL="https://bato.to";
 @Injectable()
 export class TasksService {
 constructor(private mangaService:MangaService,
     private chapterService:ChapterService,
-    private requestService:RequestService){}
+    private requestService:RequestService,
+    private notificationService:NotificationService){}
     private readonly logger = new Logger(TasksService.name);
     private readonly URL_WEBSITE:string="http://www.nettruyen.com/";
   @Cron(CronExpression.EVERY_2_HOURS)
@@ -54,6 +56,7 @@ constructor(private mangaService:MangaService,
       const resultInsertChapter =await Promise.all(ArrayPromiseInsertChapter);
       const listIdChapterInsert:string[] = resultInsertChapter.map(item=>item._id);
       await this.mangaService.updateNewChapter(manga_info._id,listIdChapterInsert);
+      this.notificationService.pushNotificationToManga(manga_info._id);
       console.log("update succes manga_id : "+ manga_info._id + " NumberChapter : "+listIdChapterInsert.length);
   }
   private async getListChapterFromWeb(url:string){
