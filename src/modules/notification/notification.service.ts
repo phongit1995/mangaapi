@@ -11,15 +11,17 @@ export class NotificationService {
     private fmcPushService:FcmPushService) {}
     async pushNotificationToManga(manga_id:string){
         const Manga = await this.mangaModel.findById(manga_id);
-        await this.fmcPushService.sendMessage({
-            notification:{title:` 🖐 ${Manga.name}`,body:" Đã Có Chương Mới !!! Xem Ngay 👉🏻"},
-            registration_ids:Manga.devices,
-            data:{
-                type:NOTIFiCATION_TYPE.NEW_CHAPTER,
-                id:Manga._id,
-                image:Manga.image
-            }
-        })
+        if(Manga.devices.length>0){
+            await this.fmcPushService.sendMessage({
+                notification:{title:` 🖐 ${Manga.name}`,body:" Đã Có Chương Mới !!! Xem Ngay 👉🏻"},
+                registration_ids:Manga.devices,
+                data:{
+                    type:NOTIFiCATION_TYPE.NEW_CHAPTER,
+                    id:Manga._id,
+                    image:Manga.image
+                }
+            })
+        }
     }
     async pushNotificationToDevices(device:string){
         await this.fmcPushService.sendMessage({
