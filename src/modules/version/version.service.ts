@@ -13,6 +13,6 @@ export class VersionService {
         return this.versionModel.create({...data});
     }
     async getListVerSion():Promise<Array<Version>>{
-        return this.versionModel.find().sort({createdAt:-1});
+        return this.versionModel.find({enable:true}).sort({createdAt:-1});
     }
 }

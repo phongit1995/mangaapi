@@ -40,7 +40,7 @@ export class MangaService {
         .skip((dataGet.page-1)*dataGet.numberItem)
         .limit(dataGet.numberItem).sort(sortOptions)
         .select("-chapters");
-        await this.cacheService.set(KEY_CACHE,listManga);
+        await this.cacheService.set(KEY_CACHE,listManga,1000*60*30);
         return listManga;
     }
     async getListMangaByCategory(dataGet:dtoGetListMangaByCategory):Promise<Manga[]>{

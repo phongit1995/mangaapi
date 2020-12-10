@@ -9,7 +9,7 @@ import { VersionService } from './version.service';
 export class VersionController {
     constructor(private versionService:VersionService){}
     @Post("create-version")
-    @ApiOperation({summary:"Create New VerSion"})
+    @ApiOperation({summary:"Create New VerSion. FOR ADMIN"})
     @ApiResponse({ status: 200, description: 'Create New Version Success.'})
     @UsePipes(new ValidationPipe({transform:true}))
     async createNewVersion(@Body()dataVersion:dtoCreateNewVersion){
