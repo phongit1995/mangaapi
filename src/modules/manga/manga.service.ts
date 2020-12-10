@@ -98,4 +98,7 @@ export class MangaService {
         manga.devices = manga.devices.filter(item=>item!=devices);
         manga.save();
     }
+    async IncreaseViewsManga(manga_id:string,view:number):Promise<void>{
+        await this.mangaModel.findByIdAndUpdate(manga_id,{$inc:{views:view}})
+    }
 }

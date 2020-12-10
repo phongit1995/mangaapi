@@ -27,6 +27,7 @@ export class ChapterService {
             chapter.images=listImages;
             await chapter.save();
         }
+        await this.IncrementToManga(chapter.manga as string);
         return chapter ;
     }
     async getListChapterManga(manga_id:string):Promise<Array<Chapter>>{
@@ -64,5 +65,18 @@ export class ChapterService {
     }
     async createNewChapter(manga_id:string,url:string,name:string,index:number,source:string){
         return this.chapterModel.create({manga:manga_id,index:index,title:name,source:source,url:url})
+    }
+    private async IncrementToManga(manga_id:string):Promise<void>{
+        const KEY_CACHE_VIEW_MANGA= "CACHE_VIEWS_MANGA"+manga_id;
+        const dataKey = await this.cacheService.get<number>(KEY_CACHE_VIEW_MANGA);
+        if(!dataKey){
+            return this.cacheService.set(KEY_CACHE_VIEW_MANGA,1);
+        }
+        let radomViewsAdd:number = Math.floor(Math.random()*(10-5))+5;
+        if(dataKey>=radomViewsAdd){
+            await this.mangaService.IncreaseViewsManga(manga_id,radomViewsAdd);
+            return await this.cacheService.set(KEY_CACHE_VIEW_MANGA,dataKey-radomViewsAdd+1);
+        }
+        await this.cacheService.set(KEY_CACHE_VIEW_MANGA,dataKey+1);
     }
 }
