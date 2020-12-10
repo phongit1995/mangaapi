@@ -5,6 +5,7 @@ import { ChapterModule } from './modules/chapter/chapter.module';
 import { TasksService } from './cron/cron.service';
 import { CategoryModule } from './modules/category/category.module';
 import { NotificationModule } from './modules/notification/notification.module';
+import { VersionModule } from './modules/version/version.module';
 
 @Module({
   imports: [
@@ -12,7 +13,8 @@ import { NotificationModule } from './modules/notification/notification.module';
     MangaModule,
     ChapterModule,
     CategoryModule,
-    NotificationModule
+    NotificationModule,
+    VersionModule
   ],
   providers: [ TasksService],
 })
