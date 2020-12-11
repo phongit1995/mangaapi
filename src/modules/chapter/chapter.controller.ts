@@ -9,9 +9,9 @@ export class ChapterController {
     constructor(private chapterService:ChapterService){}
     @Post("list-chapter")
     @ApiResponse({ status: 200, description: 'Get List Chapter Success Fully.'})
-    @UsePipes(new ValidationPipe())
+    @UsePipes(new ValidationPipe({transform:true}))
     async getListChapter(@Body()dataGet:dtoGetListChapter){
-        const listChapter = await this.chapterService.getListChapterManga(dataGet.manga_id);
+        const listChapter = await this.chapterService.getListChapterManga(dataGet.manga_id,dataGet.page,dataGet.numberItem);
         return (new ApiResult().success(listChapter))
     }
     @Post("detial-chapter")
