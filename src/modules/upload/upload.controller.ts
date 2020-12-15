@@ -10,7 +10,10 @@ export class UploadController {
     @Post("/")
     @ApiConsumes('multipart/form-data')
     @UseInterceptors(FileInterceptor('file',{
-        storage:storageDrive
+        storage:storageDrive,
+        limits:{
+            fieldSize:1000
+        }
     }))
     uploadFile(@UploadedFile()file:fileUpload){
         return (new ApiResult().success("https://drive.google.com/uc?id="+file.fileId))

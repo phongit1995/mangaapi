@@ -8,7 +8,11 @@ export const storageDrive = GoogleDriveStorage({
     drive:drive,
     parents:'15fattetjBJv7Fth4-idxtJ6YiY4yBRhm',
     fileName: function (req, file, cb) {
-        let filename = `test-${file.originalname}`;
+        if (!file.originalname.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF)$/)) {
+            req.fileValidationError = 'Only image files are allowed!';
+            return cb(new Error('ONLY_IMAGE_FILES_ALLOWED!'), false);
+        }
+        let filename = `manga_vip-${Date.now()}-${file.originalname}`;
         cb(null, filename);
     }
 })
