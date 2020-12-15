@@ -17,7 +17,13 @@ export class ChapterService {
         private requestService:RequestService,
         private cacheService:CacheService
     ){}
-    async getDetialChapter(chapter_id:string):Promise<any>{
+    async getDetialChapter(chapter_id:string):Promise<Chapter>{
+        const KEY_CACHE= "CACHE_DETIAL_CHAPTER_"+chapter_id;
+        let dataCache= await this.cacheService.get<Chapter>(KEY_CACHE);
+        if(dataCache){
+            await this.IncrementToManga(dataCache.manga as string);
+            return dataCache;
+        }
         let chapter = await this.chapterModel.findById(chapter_id);
         if(!chapter){
             throw new HttpException(ERROR_TYPE.CHAPTER_NOT_FOUND,HttpStatus.BAD_REQUEST);
@@ -27,6 +33,14 @@ export class ChapterService {
             chapter.images=listImages;
             await chapter.save();
         }
+        const [beforeChapter,afterChapter]=await Promise.all([
+            this.chapterModel.findOne({manga:chapter.manga,index:chapter.index-1}),
+            this.chapterModel.findOne({manga:chapter.manga,index:chapter.index+1}),
+        ])
+        chapter = chapter.toObject();
+        chapter.before= beforeChapter?._id ;
+        chapter.after = afterChapter?._id ;
+        await this.cacheService.set(KEY_CACHE,chapter,1000*60*60*12);
         await this.IncrementToManga(chapter.manga as string);
         return chapter ;
     }
@@ -53,6 +67,8 @@ export class ChapterService {
     }
 
     async deleteAllImagesChapter(chapter_id:string):Promise<any>{
+        const KEY_CACHE= "CACHE_DETIAL_CHAPTER_"+chapter_id;
+        this.cacheService.del(KEY_CACHE); 
         return this.chapterModel.findByIdAndUpdate(chapter_id,{images:[]});
     }
     private async getListImagesOnWeb(url:string):Promise<Array<string>>{

@@ -33,5 +33,7 @@ export interface Chapter extends mongoose.Document {
     images?:string[],
     title?:string,
     url?:string,
-    status_update_images?:boolean
+    status_update_images?:boolean,
+    before?:string,
+    after?:string
 }
