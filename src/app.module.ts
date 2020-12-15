@@ -6,6 +6,7 @@ import { TasksService } from './cron/cron.service';
 import { CategoryModule } from './modules/category/category.module';
 import { NotificationModule } from './modules/notification/notification.module';
 import { VersionModule } from './modules/version/version.module';
+import { UploadModule } from './modules/upload/upload.module';
 
 @Module({
   imports: [
@@ -14,7 +15,8 @@ import { VersionModule } from './modules/version/version.module';
     ChapterModule,
     CategoryModule,
     NotificationModule,
-    VersionModule
+    VersionModule,
+    UploadModule
   ],
   providers: [ TasksService],
 })

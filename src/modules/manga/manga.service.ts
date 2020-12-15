@@ -27,6 +27,7 @@ export class MangaService {
         const KEY_CACHE:string="CACHE_LIST_MANGA_"+dataGet.page+"_"+dataGet.type+"_"+dataGet.numberItem;
         let listManga:Manga[] = await this.cacheService.get<Manga[]>(KEY_CACHE);
         if(listManga){
+            console.log("cache");
             return listManga;
         }
         let sortOptions:object={}
