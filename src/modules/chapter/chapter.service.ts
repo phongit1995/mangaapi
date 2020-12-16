@@ -71,6 +71,9 @@ export class ChapterService {
         this.cacheService.del(KEY_CACHE); 
         return this.chapterModel.findByIdAndUpdate(chapter_id,{images:[]});
     }
+    async deleteAllImagesChapterServer():Promise<any>{
+        return this.chapterModel.updateMany({},{images:[]});
+    }
     private async getListImagesOnWeb(url:string):Promise<Array<string>>{
         const result = await this.requestService.getMethod<string>(url);
         const $ = cheerio.load(result);
