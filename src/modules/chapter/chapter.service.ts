@@ -52,7 +52,7 @@ export class ChapterService {
         }
         dataCache =await  this.chapterModel.find({
             manga:manga_id
-        }).sort({index:-1})
+        }).sort({index:1})
         .skip((page-1)*numberItem)
         .limit(numberItem)
         .select("-images -url -updatedAt -source -manga");
