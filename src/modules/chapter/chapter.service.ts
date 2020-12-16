@@ -76,7 +76,7 @@ export class ChapterService {
         const $ = cheerio.load(result);
         let listImages:string[]=[];
          $(".reading-detail > .page-chapter > img").each(function(){
-            let images= $(this).attr("src");
+            let images= $(this).data("cdn")||$(this).attr("src");
             images = images.indexOf("http")>=0 ?images:images.replace("//","http://");
             listImages.push(images);
         })
