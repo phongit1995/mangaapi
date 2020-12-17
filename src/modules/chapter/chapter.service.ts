@@ -52,7 +52,7 @@ export class ChapterService {
         }
         dataCache =await  this.chapterModel.find({
             manga:manga_id
-        }).sort({index:1})
+        }).sort({index:-1})
         .skip((page-1)*numberItem)
         .limit(numberItem)
         .select("-images -url -updatedAt -source -manga");
@@ -79,7 +79,7 @@ export class ChapterService {
         const $ = cheerio.load(result);
         let listImages:string[]=[];
          $(".reading-detail > .page-chapter > img").each(function(){
-            let images= $(this).data("cdn")||$(this).attr("src");
+            let images= $(this).attr("src");
             images = images.indexOf("http")>=0 ?images:images.replace("//","http://");
             listImages.push(images);
         })
