@@ -7,6 +7,7 @@ import { RequestService } from "./services/request.service";
 import { MongooseModule } from "@nestjs/mongoose";
 import { ScheduleModule } from '@nestjs/schedule';
 import { FcmPushService } from "./services/push.service";
+import { JwtModule } from "@nestjs/jwt";
 const providers:Array<any> = [ConfigServer,CacheService,RequestService,FcmPushService] 
 @Global()
 @Module({
@@ -28,8 +29,15 @@ const providers:Array<any> = [ConfigServer,CacheService,RequestService,FcmPushSe
             }),
             inject:[ConfigServer]
         }),
+        JwtModule.registerAsync({
+            imports:[ShareModule],
+            useFactory:async (config:ConfigServer)=>({
+                secret:config.jwtSecret
+            }),
+            inject:[ConfigServer]
+        }),
         ScheduleModule.forRoot()
     ],
-    exports:[...providers]
+    exports:[...providers,JwtModule]
 })
 export class ShareModule{}

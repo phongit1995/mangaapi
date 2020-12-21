@@ -14,7 +14,7 @@ export class dtoGetListChapter {
     @IsNumber()
     @IsOptional()
     @Min(1)
-    numberItem:number=50
+    numberItem:number=1000
 }
 export class dtoGetDetialChapter {
     @ApiProperty({title:"id of chapter"})

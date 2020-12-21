@@ -7,6 +7,7 @@ import { CategoryModule } from './modules/category/category.module';
 import { NotificationModule } from './modules/notification/notification.module';
 import { VersionModule } from './modules/version/version.module';
 import { UploadModule } from './modules/upload/upload.module';
+import { UserModule } from './modules/user/user.module';
 
 @Module({
   imports: [
@@ -16,7 +17,8 @@ import { UploadModule } from './modules/upload/upload.module';
     CategoryModule,
     NotificationModule,
     VersionModule,
-    UploadModule
+    UploadModule,
+    UserModule
   ],
   providers: [ TasksService],
 })
