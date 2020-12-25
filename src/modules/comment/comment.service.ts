@@ -88,7 +88,6 @@ export class CommentService {
     async likeComment(user_id:string,comment_id:string):Promise<any>{
         const cacheLikeKey = user_id+"_"+comment_id;
         const dataCache= await this.cacheService.get(cacheLikeKey);
-        console.log(dataCache);
         if(dataCache){
             return null ;
         }
