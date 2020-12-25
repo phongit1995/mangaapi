@@ -6,7 +6,7 @@ import { Roles } from 'src/common/decorators/role.decorators';
 import { UserInfo } from 'src/common/decorators/user.decorators';
 import { RolesGuard } from 'src/common/guards/roles.guard';
 import { ROLE_USER, User } from 'src/database/user.model';
-import { dtoCommentToChapter, dtoCommentToManga, dtoDetialComment, dtoListCommentChapter, dtoListCommentManga ,dtoReplyComment} from './comment.dto';
+import { dtoCommentToChapter, dtoCommentToManga, dtoDetialComment, dtoLikeComment, dtoListCommentChapter, dtoListCommentManga ,dtoReplyComment} from './comment.dto';
 import { CommentService } from './comment.service';
 @ApiHeader({
     name: 'token',
@@ -67,6 +67,15 @@ export class CommentController {
     @UsePipes(new ValidationPipe())
     async getDetialComment(@Body()dataDetial:dtoDetialComment){
         const comment = await this.commentService.getDetialComment(dataDetial.comment_id);
+        return (new ApiResult().success(comment))
+    }
+    @Post("like-comment")
+    @ApiOperation({summary:" Like  Comment "})
+    @ApiResponse({ status: 200, description: 'Get Detial  Comment Success Full.'})
+    @UsePipes(new ValidationPipe())
+    @Roles(RoleType.USER)
+    async userLikeComment(@Body()dataLike:dtoLikeComment,@UserInfo()user:User){
+        const comment = await this.commentService.likeComment(user._id,dataLike.comment_id);
         return (new ApiResult().success(comment))
     }
 }

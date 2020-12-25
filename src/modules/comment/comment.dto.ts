@@ -58,3 +58,8 @@ export class dtoDetialComment{
     @IsMongoId()
     comment_id:string;
 }
+export class dtoLikeComment{
+    @ApiProperty({title:"comment id"})
+    @IsMongoId()
+    comment_id:string;
+}

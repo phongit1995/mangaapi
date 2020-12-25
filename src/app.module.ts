@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ShareModule } from './shared/shared.module';
 import { MangaModule } from './modules/manga/manga.module';
 import { ChapterModule } from './modules/chapter/chapter.module';
@@ -9,6 +9,7 @@ import { VersionModule } from './modules/version/version.module';
 import { UploadModule } from './modules/upload/upload.module';
 import { UserModule } from './modules/user/user.module';
 import { CommentModule } from './modules/comment/comment.module';
+import { RequestCheckMiddleware } from './common/middleware/usermiddleware';
 
 @Module({
   imports: [
@@ -24,4 +25,10 @@ import { CommentModule } from './modules/comment/comment.module';
   ],
   providers: [ TasksService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(RequestCheckMiddleware)
+      .forRoutes("*");
+  }
+}

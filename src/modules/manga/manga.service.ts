@@ -23,6 +23,10 @@ export class MangaService {
         }
         return Manga ;
     }
+    async getMangaDataById(manga_id:string):Promise<Manga>{
+        let Manga =  await this.mangaModel.findById(manga_id).select("-chapters");
+        return Manga ;
+    }
     async getListManga(dataGet:dtoGetListManga):Promise<Manga[]>{
         const KEY_CACHE:string="CACHE_LIST_MANGA_"+dataGet.page+"_"+dataGet.type+"_"+dataGet.numberItem;
         let listManga:Manga[] = await this.cacheService.get<Manga[]>(KEY_CACHE);

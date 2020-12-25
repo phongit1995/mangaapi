@@ -24,6 +24,10 @@ export const CommentSchema:mongoose.Schema = new mongoose.Schema({
         type:mongoose.Types.ObjectId,
         ref:'manga'
     },
+    like_count:{
+        type:Number,
+        default:0
+    },
     replyCount:{
         type:Number,
         default:0
@@ -41,5 +45,6 @@ export interface Comment extends mongoose.Document {
     chapter?:string,
     manga?:string,
     replyCount?:number,
+    like_count?:number,
     reply?:Array<ReplyComment>
 }
