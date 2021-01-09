@@ -77,3 +77,9 @@ export class dtoRemoveDeviceManga{
     @IsString()
     device:string;
 }
+export class dtoHiddenManyManga{
+    @ApiProperty({description:'Number Manga Hidden'})
+    @IsNumber()
+    manga_number:number
+    
+}
