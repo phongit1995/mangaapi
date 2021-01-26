@@ -106,4 +106,17 @@ export class MangaService {
     async IncreaseViewsManga(manga_id:string,view:number):Promise<void>{
         await this.mangaModel.findByIdAndUpdate(manga_id,{$inc:{views:view}})
     }
+    async hiddenManyManga(number_manga:number){
+        const listManga = await this.mangaModel.find().sort({views:-1}).limit(number_manga);
+        const ListPromise = listManga.map((manga)=>{
+            return this.mangaModel.findByIdAndUpdate(manga._id,{enable:false});
+            
+        })
+        await Promise.all(ListPromise);
+    }
+    async showAllManga(){
+        await this.mangaModel.updateMany({},{
+            enable:true
+        })
+    }
 }
