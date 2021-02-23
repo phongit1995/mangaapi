@@ -40,7 +40,7 @@ export class ChapterService {
         chapter = chapter.toObject();
         chapter.before= beforeChapter?._id ;
         chapter.after = afterChapter?._id ;
-        await this.cacheService.set(KEY_CACHE,chapter,1000*60*60*12);
+        await this.cacheService.set(KEY_CACHE,chapter,60*60*24);
         await this.IncrementToManga(chapter.manga as string);
         return chapter ;
     }
@@ -56,7 +56,7 @@ export class ChapterService {
         .skip((page-1)*numberItem)
         .limit(numberItem)
         .select("-images -url -updatedAt -source -manga");
-        await this.cacheService.set(KEY_CACHE,dataCache,1000*60*30);
+        await this.cacheService.set(KEY_CACHE,dataCache,60*60);
         return dataCache;
     }
     async getListChapterMangaNoCache(manga_id:string):Promise<Array<Chapter>>{
