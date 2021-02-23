@@ -31,7 +31,6 @@ export class MangaService {
         const KEY_CACHE:string="CACHE_LIST_MANGA_"+dataGet.page+"_"+dataGet.type+"_"+dataGet.numberItem;
         let listManga:Manga[] = await this.cacheService.get<Manga[]>(KEY_CACHE);
         if(listManga){
-            console.log("cache");
             return listManga;
         }
         let sortOptions:object={}
@@ -44,7 +43,7 @@ export class MangaService {
         listManga = await this.mangaModel.find({enable:true})
         .skip((dataGet.page-1)*dataGet.numberItem)
         .limit(dataGet.numberItem).sort(sortOptions)
-        .select("-chapters");
+        .select("-chapters -devices");
         await this.cacheService.set(KEY_CACHE,listManga,60*60);
         return listManga;
     }
@@ -64,7 +63,7 @@ export class MangaService {
         listManga = await this.mangaModel.find({category:dataGet.category,enable:true})
         .skip((dataGet.page-1)*dataGet.numberItem)
         .limit(dataGet.numberItem).sort(sortOptions)
-        .select("-chapters");
+        .select("-chapters -devices");
         await this.cacheService.set(KEY_CACHE,listManga.concat,60*60);
         return listManga;
     }
@@ -142,7 +141,7 @@ export class MangaService {
             path:"first_chapter",
             select:"url _id"
         })
-        .select("-category -chapters -user_follow")
+        .select("-category -chapters -user_follow -devices")
         .sort(sortOptions)
         .skip((page-1)*numberItem)
         .limit(numberItem)
