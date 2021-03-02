@@ -12,7 +12,8 @@ export class ChapterController {
     @UsePipes(new ValidationPipe({transform:true}))
     async getListChapter(@Body()dataGet:dtoGetListChapter){
         const listChapter = await this.chapterService.getListChapterManga(dataGet.manga_id,dataGet.page,dataGet.numberItem);
-        return (new ApiResult().success(listChapter))
+        let totalNumber = await this.chapterService.getTotalNumberChapter(dataGet.manga_id);
+        return (new ApiResult().success(listChapter).setNumberCount(totalNumber))
     }
     @Post("detial-chapter")
     @ApiResponse({ status: 200, description: 'Get Detial Chapter Success Fully.'})

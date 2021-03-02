@@ -12,6 +12,7 @@ export class ApiResult<T> {
     public errorCode: string;
   
     public message: string;
+    public numberCount:number;
   
     public data: T;
     public success(data?: T, message?: string) {
@@ -22,7 +23,10 @@ export class ApiResult<T> {
   
       return this;
     }
-  
+    public setNumberCount(total:number){
+        this.numberCount =total;
+        return this ;
+    }
     public setMessage(message: string) {
       this.message = message;
   

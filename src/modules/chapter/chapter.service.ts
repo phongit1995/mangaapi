@@ -65,6 +65,16 @@ export class ChapterService {
         }).sort({index:1}).select("-images");
         
     }
+    async getTotalNumberChapter(manga_id:string):Promise<number>{
+        const key_cache:string ="TOTAL_NUMBER"+manga_id;
+        let dataCache= await this.cacheService.get<number>(key_cache);
+        if(dataCache){
+            return dataCache;
+        }
+       const total= await this.chapterModel.countDocuments({manga:manga_id});
+       this.cacheService.set(key_cache,total,60*30);
+       return total ;
+    }
 
     async deleteAllImagesChapter(chapter_id:string):Promise<any>{
         const KEY_CACHE= "CACHE_DETIAL_CHAPTER_"+chapter_id;
