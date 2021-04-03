@@ -77,3 +77,26 @@ export class dtoRemoveDeviceManga{
     @IsString()
     device:string;
 }
+export class dtoHiddenManyManga{
+    @ApiProperty({description:'Number Manga Hidden'})
+    @IsNumber()
+    manga_number:number
+    
+}
+export class dtoSuggestManga{
+    @ApiProperty({description:'Category Of Manga'})
+    @IsString({each:true})
+    @IsOptional()
+    category:Array<string>;
+    @ApiProperty({description:"Page Number",example:1})
+    @IsNumber()
+    page:number=1;
+    @ApiProperty({description:"Number Of Page",example:10})
+    @IsNumber()
+    @IsOptional()
+    numberItem:number=10;
+    @ApiProperty({description:"Type Suggest 1 sort by views . 2 sort by chapter update",example:1})
+    @IsEnum([1,2])
+    @IsOptional()
+    type_sort:number=1;
+}

@@ -6,6 +6,7 @@ export class ConfigServer {
         PORT: Joi.number().default(3000),
         MONGO_URL:Joi.string(),
         SERVER_PUSH_KEY:Joi.string().required(),
+        JWT_SECRET:Joi.string().required()
     }
     constructor(){
         let config = dotenv.config();
@@ -13,7 +14,6 @@ export class ConfigServer {
             throw new Error('No .env found');
         }
         this.envConfig = this.validateInput(config.parsed);
-        console.log('Config env success')
     }
     public get(key:string):string{
         return process.env[key];

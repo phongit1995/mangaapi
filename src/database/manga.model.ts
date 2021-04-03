@@ -53,7 +53,7 @@ export interface Manga extends mongoose.Document {
     name?:string,
     author?:string,
     image?:string,
-    views?:string,
+    views?:number,
     url?:string,
     manga_status?:number,
     enable?:boolean,

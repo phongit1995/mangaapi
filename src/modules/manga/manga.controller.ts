@@ -1,7 +1,7 @@
-import { Body, Controller, Post, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Post, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ApiConsumes, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ApiResult } from 'src/common/api-result';
-import { dtoAddDeviceManga, dtoGetDetialManga, dtoGetListManga, dtoGetListMangaByCategory, dtoHiddenManga, dtoRemoveDeviceManga, dtoSearchManga } from './manga.dto';
+import { dtoAddDeviceManga, dtoGetDetialManga, dtoGetListManga, dtoGetListMangaByCategory, dtoHiddenManga, dtoHiddenManyManga, dtoRemoveDeviceManga, dtoSearchManga, dtoSuggestManga } from './manga.dto';
 import { MangaService } from './manga.service';
 @ApiTags("manga")
 @ApiConsumes("Manga Api")
@@ -42,6 +42,14 @@ export class MangaController {
         const listManga = await this.mangaService.SearchMangaByName(dataGet);
         return (new ApiResult().success(listManga))
     }
+    @Post("suggest-manga")
+    @ApiOperation({summary:"List Suggest Manga"})
+    @ApiResponse({ status: 200, description: 'List Suggest Manga Success Fully.'})
+    @UsePipes(new ValidationPipe({transform:true}))
+    async suggestManga(@Body()dataSuggest:dtoSuggestManga){
+        const listSuggest= await this.mangaService.listSuggestManga(dataSuggest.category,dataSuggest.page,dataSuggest.numberItem,dataSuggest.type_sort);
+        return (new ApiResult().success(listSuggest))
+    }
     @Post("hidden-manga")
     @ApiOperation({summary:"Hidden Manga By Name"})
     @ApiResponse({ status: 200, description: 'Hidden Manga Success Fully.'})
@@ -64,6 +72,22 @@ export class MangaController {
     @UsePipes(new ValidationPipe({transform:true}))
     async removeDevicesToManga(@Body()dataAdd:dtoRemoveDeviceManga){
         await this.mangaService.removeDevicesToManga(dataAdd.manga_id,dataAdd.device);
+        return (new ApiResult().success())
+    }
+    @Post("hidden-many-manga")
+    @ApiOperation({summary:"Hidden Many Manga "})
+    @ApiResponse({ status: 200, description: 'Hidden Many Manga Success Fully.'})
+    @UsePipes(new ValidationPipe({transform:true}))
+    async HiddenManyManga(@Body()dataAdd:dtoHiddenManyManga){
+        await this.mangaService.hiddenManyManga(dataAdd.manga_number);
+        return (new ApiResult().success())
+    }
+    @Get("show-all-manga")
+    @ApiOperation({summary:"Show All  Manga Hidden"})
+    @ApiResponse({ status: 200, description: 'Show All  Manga Hidden'})
+    @UsePipes(new ValidationPipe({transform:true}))
+    async showAllManga(){
+        await this.mangaService.showAllManga()
         return (new ApiResult().success())
     }
 }
