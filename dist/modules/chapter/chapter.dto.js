@@ -13,12 +13,30 @@ exports.dtoDeleteImagesChapter = exports.dtoGetDetialChapter = exports.dtoGetLis
 const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
 class dtoGetListChapter {
+    constructor() {
+        this.page = 1;
+        this.numberItem = 1000;
+    }
 }
 __decorate([
     swagger_1.ApiProperty({ title: "id of manga" }),
     class_validator_1.IsMongoId(),
     __metadata("design:type", String)
 ], dtoGetListChapter.prototype, "manga_id", void 0);
+__decorate([
+    swagger_1.ApiProperty({ minimum: 1, default: 1, example: 1, description: "Number Page" }),
+    class_validator_1.IsNumber(),
+    class_validator_1.IsOptional(),
+    class_validator_1.Min(1),
+    __metadata("design:type", Number)
+], dtoGetListChapter.prototype, "page", void 0);
+__decorate([
+    swagger_1.ApiProperty({ minimum: 1, default: 1, example: 10, description: "Number Item Of Page" }),
+    class_validator_1.IsNumber(),
+    class_validator_1.IsOptional(),
+    class_validator_1.Min(1),
+    __metadata("design:type", Number)
+], dtoGetListChapter.prototype, "numberItem", void 0);
 exports.dtoGetListChapter = dtoGetListChapter;
 class dtoGetDetialChapter {
 }

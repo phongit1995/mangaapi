@@ -17,6 +17,7 @@ const request_service_1 = require("./services/request.service");
 const mongoose_1 = require("@nestjs/mongoose");
 const schedule_1 = require("@nestjs/schedule");
 const push_service_1 = require("./services/push.service");
+const jwt_1 = require("@nestjs/jwt");
 const providers = [config_service_1.ConfigServer, cache_service_1.CacheService, request_service_1.RequestService, push_service_1.FcmPushService];
 let ShareModule = ShareModule_1 = class ShareModule {
 };
@@ -41,9 +42,16 @@ ShareModule = ShareModule_1 = __decorate([
                 }),
                 inject: [config_service_1.ConfigServer]
             }),
+            jwt_1.JwtModule.registerAsync({
+                imports: [ShareModule_1],
+                useFactory: async (config) => ({
+                    secret: config.jwtSecret
+                }),
+                inject: [config_service_1.ConfigServer]
+            }),
             schedule_1.ScheduleModule.forRoot()
         ],
-        exports: [...providers]
+        exports: [...providers, jwt_1.JwtModule]
     })
 ], ShareModule);
 exports.ShareModule = ShareModule;

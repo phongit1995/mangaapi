@@ -38,6 +38,10 @@ let MangaController = class MangaController {
         const listManga = await this.mangaService.SearchMangaByName(dataGet);
         return (new api_result_1.ApiResult().success(listManga));
     }
+    async suggestManga(dataSuggest) {
+        const listSuggest = await this.mangaService.listSuggestManga(dataSuggest.category, dataSuggest.page, dataSuggest.numberItem, dataSuggest.type_sort);
+        return (new api_result_1.ApiResult().success(listSuggest));
+    }
     async hiddenManga(dataHidden) {
         let resultGame = await this.mangaService.HiddenManga(dataHidden.manga_id);
         return (new api_result_1.ApiResult().success());
@@ -48,6 +52,14 @@ let MangaController = class MangaController {
     }
     async removeDevicesToManga(dataAdd) {
         await this.mangaService.removeDevicesToManga(dataAdd.manga_id, dataAdd.device);
+        return (new api_result_1.ApiResult().success());
+    }
+    async HiddenManyManga(dataAdd) {
+        await this.mangaService.hiddenManyManga(dataAdd.manga_number);
+        return (new api_result_1.ApiResult().success());
+    }
+    async showAllManga() {
+        await this.mangaService.showAllManga();
         return (new api_result_1.ApiResult().success());
     }
 };
@@ -92,6 +104,16 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], MangaController.prototype, "searchManga", null);
 __decorate([
+    common_1.Post("suggest-manga"),
+    swagger_1.ApiOperation({ summary: "List Suggest Manga" }),
+    swagger_1.ApiResponse({ status: 200, description: 'List Suggest Manga Success Fully.' }),
+    common_1.UsePipes(new common_1.ValidationPipe({ transform: true })),
+    __param(0, common_1.Body()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [manga_dto_1.dtoSuggestManga]),
+    __metadata("design:returntype", Promise)
+], MangaController.prototype, "suggestManga", null);
+__decorate([
     common_1.Post("hidden-manga"),
     swagger_1.ApiOperation({ summary: "Hidden Manga By Name" }),
     swagger_1.ApiResponse({ status: 200, description: 'Hidden Manga Success Fully.' }),
@@ -121,6 +143,25 @@ __decorate([
     __metadata("design:paramtypes", [manga_dto_1.dtoRemoveDeviceManga]),
     __metadata("design:returntype", Promise)
 ], MangaController.prototype, "removeDevicesToManga", null);
+__decorate([
+    common_1.Post("hidden-many-manga"),
+    swagger_1.ApiOperation({ summary: "Hidden Many Manga " }),
+    swagger_1.ApiResponse({ status: 200, description: 'Hidden Many Manga Success Fully.' }),
+    common_1.UsePipes(new common_1.ValidationPipe({ transform: true })),
+    __param(0, common_1.Body()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [manga_dto_1.dtoHiddenManyManga]),
+    __metadata("design:returntype", Promise)
+], MangaController.prototype, "HiddenManyManga", null);
+__decorate([
+    common_1.Get("show-all-manga"),
+    swagger_1.ApiOperation({ summary: "Show All  Manga Hidden" }),
+    swagger_1.ApiResponse({ status: 200, description: 'Show All  Manga Hidden' }),
+    common_1.UsePipes(new common_1.ValidationPipe({ transform: true })),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], MangaController.prototype, "showAllManga", null);
 MangaController = __decorate([
     swagger_1.ApiTags("manga"),
     swagger_1.ApiConsumes("Manga Api"),

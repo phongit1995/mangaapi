@@ -37,6 +37,10 @@ let MangaService = class MangaService {
         }
         return Manga;
     }
+    async getMangaDataById(manga_id) {
+        let Manga = await this.mangaModel.findById(manga_id).select("-chapters");
+        return Manga;
+    }
     async getListManga(dataGet) {
         const KEY_CACHE = "CACHE_LIST_MANGA_" + dataGet.page + "_" + dataGet.type + "_" + dataGet.numberItem;
         let listManga = await this.cacheService.get(KEY_CACHE);
@@ -53,8 +57,8 @@ let MangaService = class MangaService {
         listManga = await this.mangaModel.find({ enable: true })
             .skip((dataGet.page - 1) * dataGet.numberItem)
             .limit(dataGet.numberItem).sort(sortOptions)
-            .select("-chapters");
-        await this.cacheService.set(KEY_CACHE, listManga);
+            .select("-chapters -devices");
+        await this.cacheService.set(KEY_CACHE, listManga, 60 * 60);
         return listManga;
     }
     async getListMangaByCategory(dataGet) {
@@ -73,8 +77,8 @@ let MangaService = class MangaService {
         listManga = await this.mangaModel.find({ category: dataGet.category, enable: true })
             .skip((dataGet.page - 1) * dataGet.numberItem)
             .limit(dataGet.numberItem).sort(sortOptions)
-            .select("-chapters");
-        await this.cacheService.set(KEY_CACHE, listManga);
+            .select("-chapters -devices");
+        await this.cacheService.set(KEY_CACHE, listManga.concat, 60 * 60);
         return listManga;
     }
     async SearchMangaByName(dataSearch) {
@@ -111,6 +115,51 @@ let MangaService = class MangaService {
         let manga = await this.mangaModel.findById(manga_id);
         manga.devices = manga.devices.filter(item => item != devices);
         manga.save();
+    }
+    async IncreaseViewsManga(manga_id, view) {
+        await this.mangaModel.findByIdAndUpdate(manga_id, { $inc: { views: view } });
+    }
+    async hiddenManyManga(number_manga) {
+        const listManga = await this.mangaModel.find().sort({ views: -1 }).limit(number_manga);
+        const ListPromise = listManga.map((manga) => {
+            return this.mangaModel.findByIdAndUpdate(manga._id, { enable: false });
+        });
+        await Promise.all(ListPromise);
+    }
+    async showAllManga() {
+        await this.mangaModel.updateMany({}, {
+            enable: true
+        });
+    }
+    async listSuggestManga(category, page, numberItem, type_sort) {
+        const KEY_CACHE = category.join("_") + page + "_" + numberItem + "_" + type_sort;
+        console.log(KEY_CACHE);
+        let listManga = await this.cacheService.get(KEY_CACHE);
+        if (listManga) {
+            return listManga;
+        }
+        let sortOptions = { "devices.length": -1 };
+        if (type_sort == 1) {
+            sortOptions["views"] = -1;
+        }
+        else {
+            sortOptions["chapter_update"] = -1;
+        }
+        listManga = await this.mangaModel.find({
+            "category": {
+                $in: category
+            }
+        })
+            .populate({
+            path: "first_chapter",
+            select: "url _id"
+        })
+            .select("-category -chapters -user_follow -devices")
+            .sort(sortOptions)
+            .skip((page - 1) * numberItem)
+            .limit(numberItem);
+        await this.cacheService.set(KEY_CACHE, listManga, 60 * 30);
+        return listManga;
     }
 };
 MangaService = __decorate([

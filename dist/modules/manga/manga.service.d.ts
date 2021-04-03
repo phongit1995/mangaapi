@@ -10,6 +10,7 @@ export declare class MangaService {
     constructor(mangaModel: Model<Manga>, cacheService: CacheService, chapterModel: Model<Chapter>);
     getMangaById(manga_id: string): Promise<Manga>;
     getDetialMangaById(manga_id: string): Promise<Manga>;
+    getMangaDataById(manga_id: string): Promise<Manga>;
     getListManga(dataGet: dtoGetListManga): Promise<Manga[]>;
     getListMangaByCategory(dataGet: dtoGetListMangaByCategory): Promise<Manga[]>;
     SearchMangaByName(dataSearch: dtoSearchManga): Promise<Manga[]>;
@@ -18,4 +19,8 @@ export declare class MangaService {
     updateNewChapter(manga_id: string, chapter_id: string[]): Promise<Manga>;
     addDevicesToManga(manga_id: string, devices: string): Promise<void>;
     removeDevicesToManga(manga_id: string, devices: string): Promise<void>;
+    IncreaseViewsManga(manga_id: string, view: number): Promise<void>;
+    hiddenManyManga(number_manga: number): Promise<void>;
+    showAllManga(): Promise<void>;
+    listSuggestManga(category: string[], page: number, numberItem: number, type_sort: number): Promise<Manga[]>;
 }

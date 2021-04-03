@@ -9,4 +9,6 @@ export interface Chapter extends mongoose.Document {
     title?: string;
     url?: string;
     status_update_images?: boolean;
+    before?: string;
+    after?: string;
 }

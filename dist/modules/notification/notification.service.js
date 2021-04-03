@@ -16,21 +16,48 @@ exports.NotificationService = void 0;
 const common_1 = require("@nestjs/common");
 const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
+const notification_type_1 = require("../../common/constants/notification.type");
+const comment_model_1 = require("../../database/comment.model");
 const manga_model_1 = require("../../database/manga.model");
+const user_model_1 = require("../../database/user.model");
 const push_service_1 = require("../../shared/services/push.service");
+const mongoose = require("mongoose");
 let NotificationService = class NotificationService {
-    constructor(mangaModel, fmcPushService) {
+    constructor(mangaModel, commentModel, userModel, fmcPushService) {
         this.mangaModel = mangaModel;
+        this.commentModel = commentModel;
+        this.userModel = userModel;
         this.fmcPushService = fmcPushService;
     }
     async pushNotificationToManga(manga_id) {
         const Manga = await this.mangaModel.findById(manga_id);
-        console.log(Manga.devices);
-        await this.fmcPushService.sendMessage({
-            notification: { title: "Update Manga", body: Manga.name },
-            registration_ids: Manga.devices
-        });
-        console.log(Manga);
+        if (Manga.devices.length > 0) {
+            await this.fmcPushService.sendMessage({
+                notification: { title: ` 🖐 ${Manga.name}`, body: " Đã Có Chương Mới !!! Xem Ngay 👉🏻" },
+                registration_ids: Manga.devices,
+                data: {
+                    type: notification_type_1.NOTIFiCATION_TYPE.NEW_CHAPTER,
+                    id: Manga._id,
+                    image: Manga.image
+                }
+            });
+        }
+    }
+    async pushNotificationLikeComment(comment_id, user_id) {
+        const commentData = await this.commentModel.findById(comment_id);
+        if (commentData.user.toString() == user_id) {
+            return;
+        }
+        const [userLike, userReceive] = await Promise.all([this.userModel.findById(user_id), this.userModel.findById(commentData.user)]);
+        if (userReceive.devices.length == 0) {
+            return;
+        }
+        const messageSend = {
+            registration_ids: userReceive.devices,
+            notification: {
+                title: `${userLike.name} đã like bài viết của bạn`,
+            }
+        };
     }
     async pushNotificationToDevices(device) {
         await this.fmcPushService.sendMessage({
@@ -41,11 +68,25 @@ let NotificationService = class NotificationService {
             }
         });
     }
+    async getListDevicesUser(listUser) {
+        const listUserData = await this.userModel.find({
+            _id: { $in: listUser.map((item) => new mongoose.Types.ObjectId(item)) }
+        });
+        let listDevices = [];
+        listUserData.forEach((user) => {
+            listDevices = listDevices.concat(user.devices);
+        });
+        return listDevices;
+    }
 };
 NotificationService = __decorate([
     common_1.Injectable(),
     __param(0, mongoose_1.InjectModel('manga')),
+    __param(1, mongoose_1.InjectModel('comment')),
+    __param(2, mongoose_1.InjectModel('user')),
     __metadata("design:paramtypes", [mongoose_2.Model,
+        mongoose_2.Model,
+        mongoose_2.Model,
         push_service_1.FcmPushService])
 ], NotificationService);
 exports.NotificationService = NotificationService;

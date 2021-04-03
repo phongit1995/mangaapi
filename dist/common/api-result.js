@@ -20,6 +20,10 @@ class ApiResult {
         this.data = data;
         return this;
     }
+    setNumberCount(total) {
+        this.numberCount = total;
+        return this;
+    }
     setMessage(message) {
         this.message = message;
         return this;

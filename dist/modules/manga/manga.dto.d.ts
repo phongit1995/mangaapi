@@ -28,3 +28,12 @@ export declare class dtoRemoveDeviceManga {
     manga_id: string;
     device: string;
 }
+export declare class dtoHiddenManyManga {
+    manga_number: number;
+}
+export declare class dtoSuggestManga {
+    category: Array<string>;
+    page: number;
+    numberItem: number;
+    type_sort: number;
+}

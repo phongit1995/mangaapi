@@ -30,6 +30,12 @@ let ChapterService = class ChapterService {
         this.cacheService = cacheService;
     }
     async getDetialChapter(chapter_id) {
+        const KEY_CACHE = "CACHE_DETIAL_CHAPTER_" + chapter_id;
+        let dataCache = await this.cacheService.get(KEY_CACHE);
+        if (dataCache) {
+            await this.IncrementToManga(dataCache.manga);
+            return dataCache;
+        }
         let chapter = await this.chapterModel.findById(chapter_id);
         if (!chapter) {
             throw new common_1.HttpException(error_1.ERROR_TYPE.CHAPTER_NOT_FOUND, common_1.HttpStatus.BAD_REQUEST);
@@ -39,18 +45,30 @@ let ChapterService = class ChapterService {
             chapter.images = listImages;
             await chapter.save();
         }
+        const [beforeChapter, afterChapter] = await Promise.all([
+            this.chapterModel.findOne({ manga: chapter.manga, index: chapter.index - 1 }),
+            this.chapterModel.findOne({ manga: chapter.manga, index: chapter.index + 1 }),
+        ]);
+        chapter = chapter.toObject();
+        chapter.before = beforeChapter === null || beforeChapter === void 0 ? void 0 : beforeChapter._id;
+        chapter.after = afterChapter === null || afterChapter === void 0 ? void 0 : afterChapter._id;
+        await this.cacheService.set(KEY_CACHE, chapter, 60 * 60 * 24);
+        await this.IncrementToManga(chapter.manga);
         return chapter;
     }
-    async getListChapterManga(manga_id) {
-        const KEY_CACHE = "CACHE_LIST_CHAPTER_" + manga_id;
+    async getListChapterManga(manga_id, page, numberItem) {
+        const KEY_CACHE = "CACHE_LIST_CHAPTER_" + manga_id + "_" + page + "_" + numberItem;
         let dataCache = await this.cacheService.get(KEY_CACHE);
         if (dataCache) {
             return dataCache;
         }
         dataCache = await this.chapterModel.find({
             manga: manga_id
-        }).sort({ index: 1 }).select("-images -url -updatedAt");
-        await this.cacheService.set(KEY_CACHE, dataCache, 1000 * 60 * 30);
+        }).sort({ index: -1 })
+            .skip((page - 1) * numberItem)
+            .limit(numberItem)
+            .select("-images -url -updatedAt -source -manga");
+        await this.cacheService.set(KEY_CACHE, dataCache, 60 * 60);
         return dataCache;
     }
     async getListChapterMangaNoCache(manga_id) {
@@ -58,15 +76,30 @@ let ChapterService = class ChapterService {
             manga: manga_id
         }).sort({ index: 1 }).select("-images");
     }
+    async getTotalNumberChapter(manga_id) {
+        const key_cache = "TOTAL_NUMBER" + manga_id;
+        let dataCache = await this.cacheService.get(key_cache);
+        if (dataCache) {
+            return dataCache;
+        }
+        const total = await this.chapterModel.countDocuments({ manga: manga_id });
+        this.cacheService.set(key_cache, total, 60 * 30);
+        return total;
+    }
     async deleteAllImagesChapter(chapter_id) {
+        const KEY_CACHE = "CACHE_DETIAL_CHAPTER_" + chapter_id;
+        this.cacheService.del(KEY_CACHE);
         return this.chapterModel.findByIdAndUpdate(chapter_id, { images: [] });
+    }
+    async deleteAllImagesChapterServer() {
+        return this.chapterModel.updateMany({}, { images: [] });
     }
     async getListImagesOnWeb(url) {
         const result = await this.requestService.getMethod(url);
         const $ = cheerio.load(result);
         let listImages = [];
         $(".reading-detail > .page-chapter > img").each(function () {
-            let images = $(this).attr("src");
+            let images = $(this).attr("data-cdn") || $(this).attr("src");
             images = images.indexOf("http") >= 0 ? images : images.replace("//", "http://");
             listImages.push(images);
         });
@@ -74,6 +107,19 @@ let ChapterService = class ChapterService {
     }
     async createNewChapter(manga_id, url, name, index, source) {
         return this.chapterModel.create({ manga: manga_id, index: index, title: name, source: source, url: url });
+    }
+    async IncrementToManga(manga_id) {
+        const KEY_CACHE_VIEW_MANGA = "CACHE_VIEWS_MANGA" + manga_id;
+        const dataKey = await this.cacheService.get(KEY_CACHE_VIEW_MANGA);
+        if (!dataKey) {
+            return this.cacheService.set(KEY_CACHE_VIEW_MANGA, 1);
+        }
+        let radomViewsAdd = Math.floor(Math.random() * (10 - 5)) + 5;
+        if (dataKey >= radomViewsAdd) {
+            await this.mangaService.IncreaseViewsManga(manga_id, radomViewsAdd);
+            return await this.cacheService.set(KEY_CACHE_VIEW_MANGA, dataKey - radomViewsAdd + 1);
+        }
+        await this.cacheService.set(KEY_CACHE_VIEW_MANGA, dataKey + 1);
     }
 };
 ChapterService = __decorate([

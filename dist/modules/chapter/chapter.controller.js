@@ -23,8 +23,9 @@ let ChapterController = class ChapterController {
         this.chapterService = chapterService;
     }
     async getListChapter(dataGet) {
-        const listChapter = await this.chapterService.getListChapterManga(dataGet.manga_id);
-        return (new api_result_1.ApiResult().success(listChapter));
+        const listChapter = await this.chapterService.getListChapterManga(dataGet.manga_id, dataGet.page, dataGet.numberItem);
+        let totalNumber = await this.chapterService.getTotalNumberChapter(dataGet.manga_id);
+        return (new api_result_1.ApiResult().success(listChapter).setNumberCount(totalNumber));
     }
     async getDetialListChapter(dataGet) {
         const detialChapter = await this.chapterService.getDetialChapter(dataGet.id);
@@ -34,11 +35,15 @@ let ChapterController = class ChapterController {
         await this.chapterService.deleteAllImagesChapter(dataGet.id);
         return (new api_result_1.ApiResult().success());
     }
+    async getDeleteImagesChapterServer() {
+        const dataResult = await this.chapterService.deleteAllImagesChapterServer();
+        return (new api_result_1.ApiResult().success(dataResult));
+    }
 };
 __decorate([
     common_1.Post("list-chapter"),
     swagger_1.ApiResponse({ status: 200, description: 'Get List Chapter Success Fully.' }),
-    common_1.UsePipes(new common_1.ValidationPipe()),
+    common_1.UsePipes(new common_1.ValidationPipe({ transform: true })),
     __param(0, common_1.Body()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [chapter_dto_1.dtoGetListChapter]),
@@ -62,6 +67,15 @@ __decorate([
     __metadata("design:paramtypes", [chapter_dto_1.dtoDeleteImagesChapter]),
     __metadata("design:returntype", Promise)
 ], ChapterController.prototype, "getDeleteImagesChapter", null);
+__decorate([
+    common_1.Post("delete-images-chapter-server"),
+    swagger_1.ApiOperation({ summary: "Delete Images Of Server Images. ForAdmin" }),
+    swagger_1.ApiResponse({ status: 200, description: 'Delete Images Of Chapter Success. ' }),
+    common_1.UsePipes(new common_1.ValidationPipe()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], ChapterController.prototype, "getDeleteImagesChapterServer", null);
 ChapterController = __decorate([
     swagger_1.ApiTags('chapter'),
     common_1.Controller('chapter'),

@@ -14,7 +14,17 @@ const chapter_module_1 = require("./modules/chapter/chapter.module");
 const cron_service_1 = require("./cron/cron.service");
 const category_module_1 = require("./modules/category/category.module");
 const notification_module_1 = require("./modules/notification/notification.module");
+const version_module_1 = require("./modules/version/version.module");
+const upload_module_1 = require("./modules/upload/upload.module");
+const user_module_1 = require("./modules/user/user.module");
+const comment_module_1 = require("./modules/comment/comment.module");
+const usermiddleware_1 = require("./common/middleware/usermiddleware");
 let AppModule = class AppModule {
+    configure(consumer) {
+        consumer
+            .apply(usermiddleware_1.RequestCheckMiddleware)
+            .forRoutes("*");
+    }
 };
 AppModule = __decorate([
     common_1.Module({
@@ -23,7 +33,11 @@ AppModule = __decorate([
             manga_module_1.MangaModule,
             chapter_module_1.ChapterModule,
             category_module_1.CategoryModule,
-            notification_module_1.NotificationModule
+            notification_module_1.NotificationModule,
+            version_module_1.VersionModule,
+            upload_module_1.UploadModule,
+            user_module_1.UserModule,
+            comment_module_1.CommentModule
         ],
         providers: [cron_service_1.TasksService],
     })

@@ -7,4 +7,5 @@ export declare class ChapterController {
     getListChapter(dataGet: dtoGetListChapter): Promise<ApiResult<unknown>>;
     getDetialListChapter(dataGet: dtoGetDetialChapter): Promise<ApiResult<unknown>>;
     getDeleteImagesChapter(dataGet: dtoDeleteImagesChapter): Promise<ApiResult<unknown>>;
+    getDeleteImagesChapterServer(): Promise<ApiResult<unknown>>;
 }

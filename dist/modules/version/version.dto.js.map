@@ -1,0 +1,1 @@
+{"version":3,"file":"version.dto.js","sourceRoot":"","sources":["../../../src/modules/version/version.dto.ts"],"names":[],"mappings":";;;;;;;;;;;;AAAA,6CAA8C;AAC9C,qDAAoG;AACpG,MAAa,mBAAmB;CAQ/B;AALG;IAFC,qBAAW,CAAC,EAAC,WAAW,EAAC,cAAc,EAAC,CAAC;IACzC,0BAAQ,EAAE;;iDACE;AAIb;IAHC,qBAAW,CAAC,EAAC,WAAW,EAAC,eAAe,EAAC,CAAC;IAC1C,2BAAS,EAAE;IACX,4BAAU,EAAE;;mDACG;AAPpB,kDAQC"}

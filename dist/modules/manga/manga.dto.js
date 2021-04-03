@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.dtoRemoveDeviceManga = exports.dtoAddDeviceManga = exports.dtoGetDetialManga = exports.dtoHiddenManga = exports.dtoSearchManga = exports.dtoGetListMangaByCategory = exports.dtoGetListManga = void 0;
+exports.dtoSuggestManga = exports.dtoHiddenManyManga = exports.dtoRemoveDeviceManga = exports.dtoAddDeviceManga = exports.dtoGetDetialManga = exports.dtoHiddenManga = exports.dtoSearchManga = exports.dtoGetListMangaByCategory = exports.dtoGetListManga = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
 var TYPE_GET_LIST_MANGA;
@@ -141,4 +141,43 @@ __decorate([
     __metadata("design:type", String)
 ], dtoRemoveDeviceManga.prototype, "device", void 0);
 exports.dtoRemoveDeviceManga = dtoRemoveDeviceManga;
+class dtoHiddenManyManga {
+}
+__decorate([
+    swagger_1.ApiProperty({ description: 'Number Manga Hidden' }),
+    class_validator_1.IsNumber(),
+    __metadata("design:type", Number)
+], dtoHiddenManyManga.prototype, "manga_number", void 0);
+exports.dtoHiddenManyManga = dtoHiddenManyManga;
+class dtoSuggestManga {
+    constructor() {
+        this.page = 1;
+        this.numberItem = 10;
+        this.type_sort = 1;
+    }
+}
+__decorate([
+    swagger_1.ApiProperty({ description: 'Category Of Manga' }),
+    class_validator_1.IsString({ each: true }),
+    class_validator_1.IsOptional(),
+    __metadata("design:type", Array)
+], dtoSuggestManga.prototype, "category", void 0);
+__decorate([
+    swagger_1.ApiProperty({ description: "Page Number", example: 1 }),
+    class_validator_1.IsNumber(),
+    __metadata("design:type", Number)
+], dtoSuggestManga.prototype, "page", void 0);
+__decorate([
+    swagger_1.ApiProperty({ description: "Number Of Page", example: 10 }),
+    class_validator_1.IsNumber(),
+    class_validator_1.IsOptional(),
+    __metadata("design:type", Number)
+], dtoSuggestManga.prototype, "numberItem", void 0);
+__decorate([
+    swagger_1.ApiProperty({ description: "Type Suggest 1 sort by views . 2 sort by chapter update", example: 1 }),
+    class_validator_1.IsEnum([1, 2]),
+    class_validator_1.IsOptional(),
+    __metadata("design:type", Number)
+], dtoSuggestManga.prototype, "type_sort", void 0);
+exports.dtoSuggestManga = dtoSuggestManga;
 //# sourceMappingURL=manga.dto.js.map

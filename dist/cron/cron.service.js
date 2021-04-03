@@ -18,12 +18,14 @@ const manga_service_1 = require("../modules/manga/manga.service");
 const request_service_1 = require("../shared/services/request.service");
 const cheerio = require("cheerio");
 const lodash_1 = require("lodash");
+const notification_service_1 = require("../modules/notification/notification.service");
 const BASE_URL = "https://bato.to";
 let TasksService = TasksService_1 = class TasksService {
-    constructor(mangaService, chapterService, requestService) {
+    constructor(mangaService, chapterService, requestService, notificationService) {
         this.mangaService = mangaService;
         this.chapterService = chapterService;
         this.requestService = requestService;
+        this.notificationService = notificationService;
         this.logger = new common_1.Logger(TasksService_1.name);
         this.URL_WEBSITE = "http://www.nettruyen.com/";
     }
@@ -66,6 +68,7 @@ let TasksService = TasksService_1 = class TasksService {
         const resultInsertChapter = await Promise.all(ArrayPromiseInsertChapter);
         const listIdChapterInsert = resultInsertChapter.map(item => item._id);
         await this.mangaService.updateNewChapter(manga_info._id, listIdChapterInsert);
+        this.notificationService.pushNotificationToManga(manga_info._id);
         console.log("update succes manga_id : " + manga_info._id + " NumberChapter : " + listIdChapterInsert.length);
     }
     async getListChapterFromWeb(url) {
@@ -95,7 +98,8 @@ TasksService = TasksService_1 = __decorate([
     common_1.Injectable(),
     __metadata("design:paramtypes", [manga_service_1.MangaService,
         chapter_service_1.ChapterService,
-        request_service_1.RequestService])
+        request_service_1.RequestService,
+        notification_service_1.NotificationService])
 ], TasksService);
 exports.TasksService = TasksService;
 //# sourceMappingURL=cron.service.js.map
