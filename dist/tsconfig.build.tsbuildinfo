@@ -2737,17 +2737,17 @@
         "affectsGlobalScope": true
       },
       "../src/modules/chapter/chapter.service.ts": {
-        "version": "b33f8b22e9f5875463d240d3a7990288e92cd27e2af8a874b378531dd076ac22",
-        "signature": "97296c14496fd2f56e38afa7d94369aa582e67068b6d306276c281c06587fb84",
+        "version": "2cdafc7a4f1d8742cb7721561d499429df3f90ec2995647c8efb12fa8b0f33af",
+        "signature": "d4baf07e0c95a9af568b840b8bf4358e0613893f3361fbbd130137ce699921de",
         "affectsGlobalScope": false
       },
       "../src/modules/chapter/chapter.dto.ts": {
-        "version": "5de529f6e7e2451ba4b9a41c8a410bab756695c38592769d07e67801e39b6fb7",
-        "signature": "fd590764954156b8f24b1aa760df4429fc4addd712fb8f0089ac48a3ade906c0",
+        "version": "8b3fc13072e3fae03a775bf600866ebebb2faf8b304092859feb9f3a30be2629",
+        "signature": "94ab6e7d197dbaa48ee13c0faf48d48d2bae769397ea9f711581d6d8662ed0e3",
         "affectsGlobalScope": false
       },
       "../src/modules/chapter/chapter.controller.ts": {
-        "version": "acdc99802b2a4b89e82b36518cb32499b014380073ea412cb92a9d7b18abaaa3",
+        "version": "bff9caa04feba15249263a279d7fc2d1bc1b2cac45edc2a885011c3b8f694457",
         "signature": "00c84141f48e12b1825c1ec97118db79083d25a821c3a2ff29c4cb255fddb9d0",
         "affectsGlobalScope": false
       },

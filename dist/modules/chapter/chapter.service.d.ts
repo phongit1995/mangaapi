@@ -10,7 +10,7 @@ export declare class ChapterService {
     private cacheService;
     constructor(chapterModel: Model<Chapter>, mangaService: MangaService, requestService: RequestService, cacheService: CacheService);
     getDetialChapter(chapter_id: string): Promise<Chapter>;
-    getListChapterManga(manga_id: string, page: number, numberItem: number): Promise<Array<Chapter>>;
+    getListChapterManga(manga_id: string, page: number, numberItem: number, sort: number): Promise<Array<Chapter>>;
     getListChapterMangaNoCache(manga_id: string): Promise<Array<Chapter>>;
     getTotalNumberChapter(manga_id: string): Promise<number>;
     deleteAllImagesChapter(chapter_id: string): Promise<any>;

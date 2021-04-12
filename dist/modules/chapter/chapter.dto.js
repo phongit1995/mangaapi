@@ -15,7 +15,8 @@ const class_validator_1 = require("class-validator");
 class dtoGetListChapter {
     constructor() {
         this.page = 1;
-        this.numberItem = 1000;
+        this.numberItem = 10;
+        this.sort = -1;
     }
 }
 __decorate([
@@ -37,6 +38,12 @@ __decorate([
     class_validator_1.Min(1),
     __metadata("design:type", Number)
 ], dtoGetListChapter.prototype, "numberItem", void 0);
+__decorate([
+    swagger_1.ApiProperty({ description: "Sort type", default: -1 }),
+    class_validator_1.IsEnum([1, -1]),
+    class_validator_1.IsOptional(),
+    __metadata("design:type", Number)
+], dtoGetListChapter.prototype, "sort", void 0);
 exports.dtoGetListChapter = dtoGetListChapter;
 class dtoGetDetialChapter {
 }

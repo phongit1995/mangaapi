@@ -56,15 +56,16 @@ let ChapterService = class ChapterService {
         await this.IncrementToManga(chapter.manga);
         return chapter;
     }
-    async getListChapterManga(manga_id, page, numberItem) {
-        const KEY_CACHE = "CACHE_LIST_CHAPTER_" + manga_id + "_" + page + "_" + numberItem;
+    async getListChapterManga(manga_id, page, numberItem, sort) {
+        console.log(sort);
+        const KEY_CACHE = "CACHE_LIST_CHAPTER_" + manga_id + "_" + page + "_" + numberItem + "_" + sort;
         let dataCache = await this.cacheService.get(KEY_CACHE);
         if (dataCache) {
             return dataCache;
         }
         dataCache = await this.chapterModel.find({
             manga: manga_id
-        }).sort({ index: -1 })
+        }).sort({ index: sort })
             .skip((page - 1) * numberItem)
             .limit(numberItem)
             .select("-images -url -updatedAt -source -manga");

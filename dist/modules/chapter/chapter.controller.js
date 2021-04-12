@@ -23,7 +23,7 @@ let ChapterController = class ChapterController {
         this.chapterService = chapterService;
     }
     async getListChapter(dataGet) {
-        const listChapter = await this.chapterService.getListChapterManga(dataGet.manga_id, dataGet.page, dataGet.numberItem);
+        const listChapter = await this.chapterService.getListChapterManga(dataGet.manga_id, dataGet.page, dataGet.numberItem, dataGet.sort);
         let totalNumber = await this.chapterService.getTotalNumberChapter(dataGet.manga_id);
         return (new api_result_1.ApiResult().success(listChapter).setNumberCount(totalNumber));
     }
