@@ -17,17 +17,6 @@ let RequestCheckMiddleware = class RequestCheckMiddleware {
         this.jwtService = jwtService;
     }
     async use(req, res, next) {
-        var _a, _b;
-        const token = ((_a = req.headers) === null || _a === void 0 ? void 0 : _a.token) || ((_b = req.headers) === null || _b === void 0 ? void 0 : _b.authorization);
-        if (token) {
-            try {
-                let user = this.jwtService.decode(token);
-                req.user = user;
-            }
-            catch (error) {
-                console.log('loi' + error);
-            }
-        }
         next();
     }
 };

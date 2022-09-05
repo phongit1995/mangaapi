@@ -1,0 +1,15 @@
+{
+    "apps": [
+      {
+        "name": "net-truyen-api",
+        "script": "./dist/main.js",
+        "merge_logs": true,
+        "env": {
+          "NODE_ENV": "development",
+          "PORT": 3003,
+          "MONGO_URL": "mongodb://Phong:Phongit1995@localhost:27017/mangareader?authSource=admin&readPreference=primary&appname=MongoDB%20Compass&ssl=false"
+        }
+      }
+    ]
+  }
+  

@@ -6,15 +6,20 @@ let path = require ( 'path');
 let cheerio = require("cheerio");
 let {LIST_GENDER, MANGA_TYPE} = require("../constant");
 const UserAgent = require('./../userAgent.json');
-const URL_PAGE="http://www.nettruyen.com/?page=";
+const URL_PAGE="http://www.nettruyenme.com/?page=";
 const getListLinkInPage= async (page)=>{
     let url = URL_PAGE + page;
     const options={
         url:url,
-        headers:{
-            "User-Agent":"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.66 Safari/537.36",
-            "cookie":"_ga=GA1.2.543613398.1594355006; comicvisitor=08df91f0-1872-4f63-93e0-86ced6f15a0d; __cfduid=d7d8b31265b945b9c06ee39945dd11daa1604983952; _gid=GA1.2.1212170875.1606706474; ASP.NET_SessionId=qlwudqiq4sqjfjgwscg3s11t; _gat_gtag_UA_57670566_6=1; cf_clearance=9eebd2e17908990fa50378bd5d7f7a11e4a432a5-1606710167-0-150"
-        }
+        method:'get',
+        headers: {
+            "User-Agent": "PostmanRuntime/7.29.2",
+            Accept: "*/*",
+            "Cache-Control": "no-cache",
+            "Postman-Token": "70dda507-a90e-4da8-b7e1-6b33093676e9",
+            Host: "www.nettruyenme.com",
+            Connection: "keep-alive",
+          },
     }
     let resultData = await request(options);
     let $ = cheerio.load(resultData);
@@ -35,16 +40,21 @@ const getListLinkInPage= async (page)=>{
 const getDetialComic =  async (url,commicId)=>{
     let data = await  request({
         uri:url,
-        headers:{
-            Referer:"http://www.nettruyen.com",
-            'User-Agent': UserAgent[Math.floor(Math.random()*UserAgent.length)],
-            "cookie":"_ga=GA1.2.543613398.1594355006; comicvisitor=08df91f0-1872-4f63-93e0-86ced6f15a0d; __cfduid=d7d8b31265b945b9c06ee39945dd11daa1604983952; _gid=GA1.2.1212170875.1606706474; ASP.NET_SessionId=qlwudqiq4sqjfjgwscg3s11t; cf_chl_1=d6a5a0361b3614c; cf_chl_prog=x17; cf_clearance=bff8534ac26e5269bc3fc87f8e546d8c439e5ee4-1606718724-0-150; _gat_gtag_UA_57670566_6=1"
-        }
+        headers: {
+            "User-Agent": "PostmanRuntime/7.29.2",
+            Accept: "*/*",
+            "Cache-Control": "no-cache",
+            "Postman-Token": "70dda507-a90e-4da8-b7e1-6b33093676e9",
+            Host: "www.nettruyenme.com",
+            Connection: "keep-alive",
+          },
     })
     const $ = cheerio.load(data);
     let listChapter =[];
     const listGenders = [];
-    let objects ={};
+    let objects ={
+        crawler:true
+    };
     objects["name"]= $("#item-detail > h1").text();
     objects["author"]=$("#item-detail > div.detail-info > div > div.col-xs-8.col-info > ul > li.author.row > p.col-xs-8").text();
     let status = $("#item-detail > div.detail-info > div > div.col-xs-8.col-info > ul > li.status.row > p.col-xs-8").text();
@@ -88,15 +98,8 @@ const getDetialComic =  async (url,commicId)=>{
 }
 const listCommitNotUpdate= ()=>{
     return mangaDB.find({
-        $or:[
-            {
-                description:{ $exists: false }
-            },
-            {
-                chapters:{$size:0}
-            }
-        ]
-    }).limit(6000);
+       crawler:false
+    })
 }
 
 const createNewManga = async (url)=>{

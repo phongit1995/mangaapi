@@ -33,6 +33,10 @@ let manga = new Schema({
     source:{
         type:String,
         default:MANGA_TYPE.MANGA_BATO
+    },
+    crawler:{
+        type:Boolean,
+        default:false
     }
 },{timestamps:true})
 module.exports  = mongoose.model("manga",manga);

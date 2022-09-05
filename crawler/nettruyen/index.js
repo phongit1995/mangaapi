@@ -25,7 +25,7 @@ let queue  = kue.createQueue({
 });
 // getListLinkInPage(1);
 // Get ALL Link In Chapter
-// for (let i=1;i<=533;i++){
+// for (let i=1;i<=50;i++){
 //     let job = queue.create("getLinkCommic",i).attempts(3).save(function(error) {
 //         if (!error) console.log(job.id);
 //         else console.log(error);
@@ -42,7 +42,6 @@ let queue  = kue.createQueue({
 // })
 // END  Get ALL Link In Chapter
 // GET ALL CHAPTER IN COMMIC
-//getDetialComic("http://www.nettruyen.com/truyen-tranh/tuong-quan-moi-len-giuong-25476","5fabab8ff6b9654114cf7dfb");
 listCommitNotUpdate().then(data=>{
     data.forEach((item)=>{
         let job = queue.create("getChapterComic",{url:item.url,id:item._id}).delay(500).save(function(error) {

@@ -5,15 +5,15 @@ import { Request, Response } from 'express';
 export class RequestCheckMiddleware implements NestMiddleware {
     constructor(private jwtService: JwtService){}
     async use(req: Request|any, res: Response, next: Function){
-        const token =  req.headers?.token ||req.headers?.authorization;
-        if(token){
-            try {
-                let user= this.jwtService.decode(token);
-                req.user=user ;
-            } catch (error) {
-                console.log('loi' +error);
-            }
-        }  
+        // const token =  req.headers?.token ||req.headers?.authorization;
+        // if(token){
+        //     try {
+        //         let user= this.jwtService.decode(token);
+        //         req.user=user ;
+        //     } catch (error) {
+        //         console.log('loi' +error);
+        //     }
+        // }  
         next();
     }
 }

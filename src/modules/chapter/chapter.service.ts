@@ -86,7 +86,16 @@ export class ChapterService {
         return this.chapterModel.updateMany({},{images:[]});
     }
     private async getListImagesOnWeb(url:string):Promise<Array<string>>{
-        const result = await this.requestService.getMethod<string>(url);
+        const result = await this.requestService.getMethod<string>(url,{
+            headers:{
+                "User-Agent": "PostmanRuntime/7.29.2",
+            Accept: "*/*",
+            "Cache-Control": "no-cache",
+            "Postman-Token": "70dda507-a90e-4da8-b7e1-6b33093676e9",
+            Host: "www.nettruyenme.com",
+            Connection: "keep-alive",
+            }
+        });
         const $ = cheerio.load(result);
         let listImages:string[]=[];
          $(".reading-detail > .page-chapter > img").each(function(){
